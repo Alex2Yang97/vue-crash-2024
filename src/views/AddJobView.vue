@@ -1,6 +1,8 @@
 <script setup>
-import router from '@/router';
+// import router from '@/router';
+import { useRouter } from 'vue-router';
 import { reactive } from 'vue';
+import { useToast } from 'vue-toastification';
 import axios from 'axios';
 
 
@@ -18,28 +20,32 @@ const form = reactive({
     },
 });
 
-// const handleSubmit = async () => {
-//     const newJob = {
-//         type: form.type,
-//         title: form.title,
-//         description: form.description,
-//         salary: form.salary,
-//         location: form.location,
-//         company: {
-//             name: form.company.name,
-//             description: form.company.description,
-//             contactEmail: form.company.contactEmail,
-//             contactPhone: form.company.contactPhone,
-//         }
-//     };
+const toast = useToast();
+const router = useRouter();
+const handleSubmit = async () => {
+    const newJob = {
+        type: form.type,
+        title: form.title,
+        description: form.description,
+        salary: form.salary,
+        location: form.location,
+        company: {
+            name: form.company.name,
+            description: form.company.description,
+            contactEmail: form.company.contactEmail,
+            contactPhone: form.company.contactPhone,
+        }
+    };
 
-//     try {
-//         const response = await axios.post(`/api/jobs`, newJob);
-//         router.push(`/jobs/${response.data.id}`);
-//     } catch (error) {
-//         console.error('Error fetching jobs:', error);
-//     }
-// };
+    try {
+        const response = await axios.post(`/api/jobs`, newJob);
+        router.push(`/jobs/${response.data.id}`);
+        toast.success('Job added successfully');
+    } catch (error) {
+        console.error('Error fetching jobs:', error);
+        toast.error('Error adding job');
+    }
+};
 
 </script>
 
